@@ -23,7 +23,7 @@ namespace HotelListing.DTOs
         [ForeignKey(nameof(Country))]
         public int CountryId { get; set; }
     }
-    public class HotelDTO
+    public class HotelDTO: CreateHotelDTO
     {
         [Key]
         public int Id { get; set; }
