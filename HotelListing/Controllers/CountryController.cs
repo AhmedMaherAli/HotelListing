@@ -59,6 +59,6 @@ namespace HotelListing.Controllers
                 return StatusCode(500, "Internal server error, please try again later."); // 
             }
         }
-
+        
     }
 }
