@@ -29,8 +29,8 @@ namespace HotelListing.Services
         {
             SigningCredentials signinCredentials = GetSigninCredentials();
             var claims = await GetClaims();
-            var tokenOptions = GenerateTokenOptions(signinCredentials, claims);
-            return new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            var token = GenerateTokenOptions(signinCredentials, claims);
+            return new JwtSecurityTokenHandler().WriteToken(token);
             
         }
 
@@ -38,6 +38,7 @@ namespace HotelListing.Services
         {
             var jwtSettings = configuration.GetSection("Jwt");
             var expiration = DateTime.Now.AddMinutes(Convert.ToDouble(jwtSettings.GetSection("lifetime").Value));
+
             JwtSecurityToken token = new JwtSecurityToken(
                 issuer: jwtSettings.GetSection("Issuer").Value,
                 claims: claims,
@@ -49,11 +50,14 @@ namespace HotelListing.Services
 
         private async Task<IList<Claim> >GetClaims()
         {
+
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name,_user.Email)
+                new Claim(ClaimTypes.Name,_user.UserName)
             };
+
             var roles = await _userManager.GetRolesAsync(_user);
+
             foreach(var role in roles ){
                 claims.Add(new Claim(ClaimTypes.Role, role));
             }

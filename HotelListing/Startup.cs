@@ -36,7 +36,11 @@ namespace HotelListing
             
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            
+
+            services.AddAuthentication();
+            services.ConfigureIdentity();
+            services.ConfigureJWT(Configuration);
+
             services.AddCors(o =>
             {
                 o.AddPolicy("AllowAllToUse", builder =>
@@ -46,7 +50,6 @@ namespace HotelListing
             });
             
             services.AddAutoMapper(typeof(MapperInitializer));
-
             services.AddTransient<IUnitOfWork, UnitOfWork>(); // Transient objects are always different; a new instance is provided to every controller and every service.
             services.AddScoped<IAuthManager, AuthManager>();
             services.AddSwaggerGen(c =>
@@ -54,9 +57,7 @@ namespace HotelListing
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "HotelListing", Version = "v1" });
             });
 
-            services.AddAuthentication();
-            services.ConfigureIdentity();
-            services.ConfigureJWT(Configuration);
+            
             services.AddControllers().AddNewtonsoftJson(option =>
                 option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
@@ -72,11 +73,13 @@ namespace HotelListing
             }
 
             app.UseHttpsRedirection();
+
             app.UseCors("AllowAllToUse");
+
             app.UseRouting();
+
             app.UseAuthentication();
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

@@ -16,7 +16,6 @@ namespace HotelListing.Controllers
     public class AccountController:ControllerBase
     {
         private readonly UserManager<ApiUser> _userManager;
-       // private readonly SignInManager<ApiUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
         private readonly IMapper _mapper;
         private readonly IAuthManager _authManager;
@@ -24,7 +23,6 @@ namespace HotelListing.Controllers
         public AccountController(UserManager<ApiUser> userManager, ILogger<AccountController> looger, IMapper mapper, IAuthManager authManager)
         {
             _userManager = userManager;
-            // _signInManager = signInManager;
             _logger = looger;
             _mapper = mapper;
             _authManager = authManager;
@@ -80,7 +78,7 @@ namespace HotelListing.Controllers
                 bool result = await _authManager.ValidateUser(loginUserDTO);
                 if (!result)
                 {
-                    return Unauthorized(loginUserDTO);
+                    return Unauthorized();
                 }
                 return Accepted(new { Token = await _authManager.CreateToken()} );
             }

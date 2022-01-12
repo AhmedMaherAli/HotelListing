@@ -20,7 +20,7 @@ namespace HotelListing.Repositry
         }
 
         public IGenericRepository<Country> Countries => _countries ??= new GenericRepository<Country>(_dbContext);
-        public IGenericRepository<Hotel> Hotels => _hotels ??= new GenericRepository<Hotel>(_dbContext);
+        public IGenericRepository<Hotel> Country => _hotels ??= new GenericRepository<Hotel>(_dbContext);
 
         public void Dispose()
         {
